@@ -16,6 +16,7 @@ def main():
 
         # FOR DEBUG PURPOSES
         board.print_grid(game_board)
+        time.sleep(2)
 
         # YOUR CODE GOES HERE
 

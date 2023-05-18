@@ -26,6 +26,7 @@ class Board:
                 elif grid[i][j] == BLUE:
                     print("B", end=" \t")
             print("\n")
+        print('---------------------------')
 
     def _convert_grid_to_color(self, grid):
         for i in range(0, len(grid)):
@@ -89,6 +90,6 @@ class Board:
 
     def select_column(self, column):
         pyautogui.click(
-            self._get_grid_cordinates()[column][0] + LEFT,
-            self._get_grid_cordinates()[column][1] + TOP,
+            self._get_grid_cordinates()[column][1] + LEFT,
+            self._get_grid_cordinates()[column][0] + TOP,
         )
