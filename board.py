@@ -13,9 +13,19 @@ BLUE = 2
 
 
 class Board:
+    
     def __init__(self) -> None:
         self.board = [[EMPTY for i in range(7)] for j in range(6)]
+        '''
+    def __init__(self) -> None:
+        self.board = [[EMPTY for i in range(7)] for j in range(6)]
+        # code to initialize empty board:-
+        for i in range(0, 6):
+            for j in range(0, 7):
+                self.board[i][j] = 0
+                '''
 
+    
     def print_grid(self, grid):
         for i in range(0, len(grid)):
             for j in range(0, len(grid[i])):
@@ -27,6 +37,17 @@ class Board:
                     print("B", end=" \t")
             print("\n")
         print('---------------------------')
+    
+    def print_grid2(self):
+        print(" ", end="")
+        for i in range(0, 7):
+            print(" ", i, end="")
+        print()
+        for i in range(0, len(self.board)):
+            print(i, " ", end="")
+            for j in range(0, len(self.board[i])):
+                print(self.board[i][j], end="  ")
+            print()
 
     def _convert_grid_to_color(self, grid):
         for i in range(0, len(grid)):

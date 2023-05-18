@@ -2,11 +2,17 @@ from board import Board
 import time
 import random
 
+EMPTY = 0
+RED = 1
+BLUE = 2
+
 
 # GAME LINK
 # http://kevinshannon.com/connect4/
 
 def getUtility(board):
+    #b = Board()
+    #b.print_grid(board)
     Utility = 0
     # Calculate max Red in 4 consecutive cells
     maxRed = 0
@@ -15,37 +21,37 @@ def getUtility(board):
             if j < 4:
                 currentStreak = 0
                 for k in range(j, j + 4):
-                    if board[i][k] == 'B':
+                    if board[i][k] == BLUE:
                         currentStreak = 0
                         break
-                    if board[i][k] == 'R':
+                    if board[i][k] == RED :
                         currentStreak += 1
                 maxRed = max(maxRed, currentStreak)
             if i < 3:
                 currentStreak = 0
                 for k in range(i, i + 4):
-                    if board[k][j] == 'B':
+                    if board[k][j] == BLUE:
                         currentStreak = 0
                         break
-                    if board[k][j] == 'R':
+                    if board[k][j] == RED:
                         currentStreak += 1
                 maxRed = max(maxRed, currentStreak)
             if j < 4 and i < 3:
                 currentStreak = 0
                 for k, l in zip(range(i, i + 4), range(j, j + 4)):
-                    if board[k][l] == 'B':
+                    if board[k][l] == BLUE:
                         currentStreak = 0
                         break
-                    if board[k][l] == 'R':
+                    if board[k][l] == RED:
                         currentStreak += 1
                 maxRed = max(maxRed, currentStreak)
             if j > 2 and i < 3:
                 currentStreak = 0
                 for k, l in zip(range(i, i + 4), reversed(range(j - 3, j + 1))):
-                    if board[k][l] == 'B':
+                    if board[k][l] == BLUE:
                         currentStreak = 0
                         break
-                    if board[k][l] == 'R':
+                    if board[k][l] == RED:
                         currentStreak += 1
                 maxRed = max(maxRed, currentStreak)
     maxBlue = 0
@@ -54,37 +60,37 @@ def getUtility(board):
             if j < 4:
                 currentStreak = 0
                 for k in range(j, j + 4):
-                    if board[i][k] == 'R':
+                    if board[i][k] == RED:
                         currentStreak = 0
                         break
-                    if board[i][k] == 'B':
+                    if board[i][k] == BLUE:
                         currentStreak += 1
                 maxBlue = max(maxBlue, currentStreak)
             if i < 3:
                 currentStreak = 0
                 for k in range(i, i + 4):
-                    if board[k][j] == 'R':
+                    if board[k][j] == RED:
                         currentStreak = 0
                         break
-                    if board[k][j] == 'B':
+                    if board[k][j] == BLUE:
                         currentStreak += 1
                 maxBlue = max(maxBlue, currentStreak)
             if j < 4 and i < 3:
                 currentStreak = 0
                 for k, l in zip(range(i, i + 4), range(j, j + 4)):
-                    if board[k][l] == 'R':
+                    if board[k][l] == RED:
                         currentStreak = 0
                         break
-                    if board[k][l] == 'B':
+                    if board[k][l] == BLUE:
                         currentStreak += 1
                 maxBlue = max(maxBlue, currentStreak)
             if j > 2 and i < 3:
                 currentStreak = 0
                 for k, l in zip(range(i, i + 4), reversed(range(j - 3, j + 1))):
-                    if board[k][l] == 'R':
+                    if board[k][l] == RED:
                         currentStreak = 0
                         break
-                    if board[k][l] == 'B':
+                    if board[k][l] == BLUE:
                         currentStreak += 1
                 maxBlue = max(maxBlue, currentStreak)
 
@@ -156,7 +162,14 @@ def printBoard(board):
 
 def main():
     # board = Board()
+    print("game 2")
     b = Board()
+    (game_board, game_end) = b.get_game_grid()
+ 
+    b.print_grid(b.board)
+    grade = getUtility(b.board)
+    print(grade)
+    
     # i=0
     # j=3
     # for k, l in zip(range(i, i+4), reversed(range(j-3, j+1))):
@@ -165,6 +178,7 @@ def main():
     # b.board=insertPiece(b.board, 5, 'B')
     # b.print_grid()
     #test()
+    """
     while True:
         x = 0
         y = 0
@@ -198,6 +212,7 @@ def main():
     # board.select_column(random_column)
 
     # time.sleep(2)
+    """
 
 
 if __name__ == "__main__":
