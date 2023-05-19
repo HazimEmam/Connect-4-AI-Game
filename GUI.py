@@ -10,6 +10,12 @@ import tkinter as tk
 root = tk.Tk()
 root.title("Difficulty Selection")
 
+
+# Create a variable to store the selected option
+option = tk.StringVar(value="Option 1")
+option = tk.StringVar(value="Option 2")
+
+
 # Set the window size and position
 WINDOW_WIDTH = 400
 WINDOW_HEIGHT = 300
@@ -20,6 +26,12 @@ y_pos = int((screen_height/2) - (WINDOW_HEIGHT/2))
 root.geometry(f'{WINDOW_WIDTH}x{WINDOW_HEIGHT}+{x_pos}+{y_pos}')
 
 # Define the callback functions for each button
+def select_MinMax():
+    print("MinMax Algorithm")
+
+def select_AlphaBeta():
+    print("AlphaBeta Algorthim")
+
 def select_easy():
     print("Easy mode selected")
 
@@ -31,20 +43,22 @@ def select_medium():
 def select_hard():
     print("Hard mode selected")
 
+
+# Create the radio buttons
+rb1 = tk.Radiobutton(root, text="MinMax Algorithm",command = select_MinMax ,variable=option, value="MinMax Algorithm")
+rb2 = tk.Radiobutton (root, text="AlphaBeta Algorithm",command = select_AlphaBeta ,variable=option, value="AlphaBeta Algorithm")
+
 # Create the buttons and add them to the window
 button_easy = tk.Button(root, text="Easy", command=select_easy, width=20, height=3)
 button_medium = tk.Button(root, text="Medium", command=select_medium, width=20, height=3)
 button_hard = tk.Button(root, text="Hard", command=select_hard, width=20, height=3)
 
-# Center the buttons horizontally and vertically
-button_width = 120
-button_height = 80
-x_pos = (WINDOW_WIDTH - button_width) / 2
-y_pos = (WINDOW_HEIGHT - button_height * 3 - 20) / 2
+rb1.pack(side="top")
+rb2.pack(side="top", padx=50, pady=0)
+button_easy.pack(side="top",pady=10)
+button_medium.pack(side= "top",pady=10)
+button_hard.pack(side= "top",pady=10)
 
-button_easy.place(x=x_pos, y=y_pos, width=button_width, height=button_height)
-button_medium.place(x=x_pos, y=y_pos + button_height + 10, width=button_width, height=button_height)
-button_hard.place(x=x_pos, y=y_pos + button_height * 2 + 20, width=button_width, height=button_height)
 
 # Start the main loop
 root.mainloop()
