@@ -2,17 +2,11 @@ from board import Board
 import time
 import random
 
-EMPTY = 0
-RED = 1
-BLUE = 2
-
 
 # GAME LINK
 # http://kevinshannon.com/connect4/
 
 def getUtility(board):
-    #b = Board()
-    #b.print_grid(board)
     Utility = 0
     # Calculate max Red in 4 consecutive cells
     maxRed = 0
@@ -21,37 +15,37 @@ def getUtility(board):
             if j < 4:
                 currentStreak = 0
                 for k in range(j, j + 4):
-                    if board[i][k] == BLUE:
+                    if board[i][k] == 'B':
                         currentStreak = 0
                         break
-                    if board[i][k] == RED :
+                    if board[i][k] == 'R':
                         currentStreak += 1
                 maxRed = max(maxRed, currentStreak)
             if i < 3:
                 currentStreak = 0
                 for k in range(i, i + 4):
-                    if board[k][j] == BLUE:
+                    if board[k][j] == 'B':
                         currentStreak = 0
                         break
-                    if board[k][j] == RED:
+                    if board[k][j] == 'R':
                         currentStreak += 1
                 maxRed = max(maxRed, currentStreak)
             if j < 4 and i < 3:
                 currentStreak = 0
                 for k, l in zip(range(i, i + 4), range(j, j + 4)):
-                    if board[k][l] == BLUE:
+                    if board[k][l] == 'B':
                         currentStreak = 0
                         break
-                    if board[k][l] == RED:
+                    if board[k][l] == 'R':
                         currentStreak += 1
                 maxRed = max(maxRed, currentStreak)
             if j > 2 and i < 3:
                 currentStreak = 0
                 for k, l in zip(range(i, i + 4), reversed(range(j - 3, j + 1))):
-                    if board[k][l] == BLUE:
+                    if board[k][l] == 'B':
                         currentStreak = 0
                         break
-                    if board[k][l] == RED:
+                    if board[k][l] == 'R':
                         currentStreak += 1
                 maxRed = max(maxRed, currentStreak)
     maxBlue = 0
@@ -60,37 +54,37 @@ def getUtility(board):
             if j < 4:
                 currentStreak = 0
                 for k in range(j, j + 4):
-                    if board[i][k] == RED:
+                    if board[i][k] == 'R':
                         currentStreak = 0
                         break
-                    if board[i][k] == BLUE:
+                    if board[i][k] == 'B':
                         currentStreak += 1
                 maxBlue = max(maxBlue, currentStreak)
             if i < 3:
                 currentStreak = 0
                 for k in range(i, i + 4):
-                    if board[k][j] == RED:
+                    if board[k][j] == 'R':
                         currentStreak = 0
                         break
-                    if board[k][j] == BLUE:
+                    if board[k][j] == 'B':
                         currentStreak += 1
                 maxBlue = max(maxBlue, currentStreak)
             if j < 4 and i < 3:
                 currentStreak = 0
                 for k, l in zip(range(i, i + 4), range(j, j + 4)):
-                    if board[k][l] == RED:
+                    if board[k][l] == 'R':
                         currentStreak = 0
                         break
-                    if board[k][l] == BLUE:
+                    if board[k][l] == 'B':
                         currentStreak += 1
                 maxBlue = max(maxBlue, currentStreak)
             if j > 2 and i < 3:
                 currentStreak = 0
                 for k, l in zip(range(i, i + 4), reversed(range(j - 3, j + 1))):
-                    if board[k][l] == RED:
+                    if board[k][l] == 'R':
                         currentStreak = 0
                         break
-                    if board[k][l] == BLUE:
+                    if board[k][l] == 'B':
                         currentStreak += 1
                 maxBlue = max(maxBlue, currentStreak)
 
@@ -107,20 +101,29 @@ def insertPiece(board, column, piece):
 
 
 def minMax(board, minOrMax, maxDepth, currentDepth=1):
+    if minOrMax == "min" and gameOver(board):
+        return 5
+    elif minOrMax == "max" and gameOver(board):
+        return -5
     if currentDepth == maxDepth:
         return getUtility(board)
     arr = []
     for i in range(0, 7):
-        if minOrMax == "max":
+        if minOrMax == "max" and board[0][i] == '*':
             newBoard = insertPiece(board, i, 'R')
-            currentUtility = minMax(newBoard, "min", maxDepth, currentDepth + 1)
-            arr.append(currentUtility)
-        else:
+            if gameOver(newBoard):
+                arr.append(4)
+            else:
+                currentUtility = minMax(newBoard, "min", maxDepth, currentDepth + 1)
+                arr.append(currentUtility)
+        elif board[0][i] == '*':
             newBoard = insertPiece(board, i, 'B')
-            currentUtility = minMax(newBoard, "max", maxDepth, currentDepth + 1)
-            arr.append(currentUtility)
+            if gameOver(newBoard):
+                arr.append(-4)
+            else:
+                currentUtility = minMax(newBoard, "max", maxDepth, currentDepth + 1)
+                arr.append(currentUtility)
     arr = sorted(arr)
-    #print(arr)
     if minOrMax == "max":
         return arr[-1]
     else:
@@ -130,15 +133,27 @@ def minMax(board, minOrMax, maxDepth, currentDepth=1):
 def chooseColumn(board, maxDepth):
     arr = []
     for i in range(0, 7):
-        #printBoard(board)
-        newBoard = insertPiece(board, i, 'R')
-        currentUtility = minMax(newBoard, "min", maxDepth)
-        pair = (currentUtility, i)
-        arr.append(pair)
-    arr = sorted(arr)
+        if board[0][i] == '*':
+            newBoard = insertPiece(board, i, 'R')
+            currentUtility = minMax(newBoard, "min", maxDepth)
+            pair = (currentUtility, i)
+            arr.append(pair)
     print(arr)
-    return arr[-1][1]
+    newArr = getMaxElements(arr)
+    print(newArr)
+    return newArr[int((len(newArr)-1)/2)][1]
 
+
+def getMaxElements(arr):
+    maxElement = -5
+    newArr = []
+    for i in range(0, len(arr)):
+        if arr[i][0] > maxElement:
+            maxElement = arr[i][0]
+    for i in range(0, len(arr)):
+        if arr[i][0] == maxElement:
+            newArr.append(arr[i])
+    return newArr
 
 def test():
     pair = (4, -1)
@@ -160,16 +175,32 @@ def printBoard(board):
             print(board[i][j], end="  ")
         print()
 
+
+def gameOver(board):
+    for i in range(0, 6):
+        for j in range(0, 7):
+            if j < 4 and board[i][j] == 'R' and board[i][j+1] == 'R' and board[i][j+2] == 'R' and board[i][j+3] == 'R':
+                return True
+            elif j < 4 and board[i][j] == 'B' and board[i][j+1] == 'B' and board[i][j+2] == 'B' and board[i][j+3] == 'B':
+                return True
+            if i < 3 and board[i][j] == 'R' and board[i+1][j] == 'R' and board[i+2][j] == 'R' and board[i+3][j] == 'R':
+                return True
+            elif i < 3 and board[i][j] == 'B' and board[i+1][j] == 'B' and board[i+2][j] == 'B' and board[i+3][j] == 'B':
+                return True
+            if j < 4 and i < 3 and board[i][j] == 'R' and board[i+1][j+1] == 'R' and board[i+2][j+2] == 'R' and board[i+3][j+3] == 'R':
+                return True
+            elif j < 4 and i < 3 and board[i][j] == 'B' and board[i+1][j+1] == 'B' and board[i+2][j+2] == 'B' and board[i+3][j+3] == 'B':
+                return True
+            if j > 2 and i < 3 and board[i][j] == 'R' and board[i+1][j-1] == 'R' and board[i+2][j-2] == 'R' and board[i+3][j-3] == 'R':
+                return True
+            elif j > 2 and i < 3 and board[i][j] == 'B' and board[i+1][j-1] == 'B' and board[i+2][j-2] == 'B' and board[i+3][j-3] == 'B':
+                return True
+    return False
+
+
 def main():
     # board = Board()
-    print("game 2")
     b = Board()
-    (game_board, game_end) = b.get_game_grid()
- 
-    b.print_grid(b.board)
-    grade = getUtility(b.board)
-    print(grade)
-    
     # i=0
     # j=3
     # for k, l in zip(range(i, i+4), reversed(range(j-3, j+1))):
@@ -178,7 +209,6 @@ def main():
     # b.board=insertPiece(b.board, 5, 'B')
     # b.print_grid()
     #test()
-    """
     while True:
         x = 0
         y = 0
@@ -189,9 +219,10 @@ def main():
         b.board[x][y] = z
         # b.board = insertPiece(b.board, 5, 'B')
         b.print_grid()
-        print(getUtility(b.board))
+        #print(getUtility(b.board))
         #minMax(b.board, "max", 1)
-        #print(chooseColumn(b.board, 1))
+        print(chooseColumn(b.board, 4))
+        #print(gameOver(b.board))
 
     # time.sleep(2)
     # game_end = False
@@ -212,7 +243,6 @@ def main():
     # board.select_column(random_column)
 
     # time.sleep(2)
-    """
 
 
 if __name__ == "__main__":
