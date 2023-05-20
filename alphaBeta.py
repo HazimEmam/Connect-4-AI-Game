@@ -109,12 +109,12 @@ class AlphaBeta:
         if minOrMax == "max":
             currentUtility = -999999
             for i in range(0, 7):
-                # and board[0][i] == EMPTY
-                newBoard = self.insertPiece(board, i, RED)
-                currentUtility = max(currentUtility,self.alphaBetaPruning(newBoard,"min", maxDepth, alpha , beta, currentDepth + 1))
-                if(currentUtility > beta):
-                    break
-                alpha = max(alpha,currentUtility)
+                if (board[0][i] == EMPTY):
+                    newBoard = self.insertPiece(board, i, RED)
+                    currentUtility = max(currentUtility,self.alphaBetaPruning(newBoard,"min", maxDepth, alpha , beta, currentDepth + 1))
+                    if(currentUtility > beta):
+                        break
+                    alpha = max(alpha,currentUtility)
             return currentUtility
         else:
             currentUtility = 999999
