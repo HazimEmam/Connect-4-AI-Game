@@ -126,14 +126,15 @@ class AlphaBeta:
         else:
             currentUtility = 999999
             for i in range(0, 7):
-                newBoard = self.insertPiece(board, i, BLUE)
-                if self.gameOver(newBoard):
-                    currentUtility = -4
-                else:
-                    currentUtility = min(currentUtility,self.alphaBetaPruning(newBoard,"max", maxDepth, alpha , beta, currentDepth + 1))
-                if(currentUtility < alpha):
-                    break
-                beta = min(beta,currentUtility)
+               if (board[0][i] == EMPTY):
+                    newBoard = self.insertPiece(board, i, BLUE)
+                    if self.gameOver(newBoard):
+                        currentUtility = -4
+                    else:
+                        currentUtility = min(currentUtility, self.alphaBetaPruning(newBoard, "max", maxDepth, alpha , beta, currentDepth + 1))
+                    if(currentUtility < alpha):
+                        break
+                    beta = min(beta,currentUtility)
             if( currentUtility == 999999):
                 return self.getUtility(board)
             else :
