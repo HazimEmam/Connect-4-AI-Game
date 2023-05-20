@@ -1,4 +1,4 @@
-from boardWithUtilityFunction import Board
+from board import Board
 import time
 import random
 

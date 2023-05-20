@@ -4,7 +4,7 @@ EMPTY = 0
 RED = 1
 BLUE = 2
 
-class AlphaBeta:
+class MinMax:
 
     def getUtility(self ,board):
         #b = Board()
@@ -90,8 +90,6 @@ class AlphaBeta:
                             currentStreak += 1
                     maxBlue = max(maxBlue, currentStreak)
 
-        if(maxBlue == 3):
-            return -3
         return maxRed - maxBlue
     
     def insertPiece(self ,board, column, piece):
@@ -103,34 +101,27 @@ class AlphaBeta:
         return newBoard
 
 
-    def alphaBetaPruning(self ,board, minOrMax, maxDepth, alpha , beta, currentDepth=1):
+    def alphaBetaPruning(self ,board, minOrMax, maxDepth, currentDepth=1):
         if currentDepth == maxDepth:
             return self.getUtility(board)
-        
+        arr = []
         for i in range(0, 7):
             if minOrMax == "max":
-                alpha = -999999
                 newBoard = self.insertPiece(board, i, RED)
-                #print("new board " ,i+1 ,newBoard)
+                #print("new board " ,i+1)
                 #print(newBoard)
-                currentUtility = self.alphaBetaPruning(newBoard, "min", maxDepth, alpha , beta ,currentDepth + 1)
-                alpha = max(alpha,currentUtility)
-                if(beta <= alpha):
-                    break
+                currentUtility = self.alphaBetaPruning(newBoard, "min", maxDepth, currentDepth + 1)
+                arr.append(currentUtility)
             else:
-                beta = 999999
                 newBoard = self.insertPiece(board, i, BLUE)
-                currentUtility = self.alphaBetaPruning(newBoard, "max", maxDepth,alpha , beta,currentDepth + 1)
-                beta = min(beta ,currentUtility)
-                
-                if(beta <= alpha):
-                    break
-
-        #print("alpha : ",alpha ,", beta : ", beta)
+                currentUtility = self.alphaBetaPruning(newBoard, "max", maxDepth, currentDepth + 1)
+                arr.append(currentUtility)
+        arr = sorted(arr)
+        print(arr)
         if minOrMax == "max":
-            return alpha
+            return arr[-1]
         else:
-            return beta
+            return arr[0]
 
 
     def chooseColumn(self , board, maxDepth):
@@ -138,13 +129,14 @@ class AlphaBeta:
         for i in range(0, 7):
             #printBoard(board)
             newBoard = self.insertPiece(board, i, RED)
-            currentUtility = self.alphaBetaPruning(newBoard, "min", maxDepth , -999999 , 999999)
+            currentUtility = self.alphaBetaPruning(newBoard, "min", maxDepth)
             pair = (currentUtility, i)
             arr.append(pair)
         arr = sorted(arr)
-        print(arr)
-        newArr = self.getMaxArray(arr)
-        return random.choice(newArr)
+        #print(arr)
+        #newArr = self.getMaxArray(arr)
+        #return random.choice(newArr)
+        return  arr[-1][1]
     
     def getMaxArray(self ,arr):
         newArr =[]
