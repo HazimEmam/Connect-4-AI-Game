@@ -34,7 +34,8 @@ def main():
 
         # Insert here the action you want to perform based on the output of the algorithm
         # You can use the following function to select a column
-        selected_column = min.chooseColumn(game_board,5)
+        selected_column = alpha.chooseColumn(game_board,6)
+        print("selected column = ",selected_column)
         board.select_column(selected_column)
 
         time.sleep(2)
