@@ -111,20 +111,34 @@ class AlphaBeta:
             for i in range(0, 7):
                 if (board[0][i] == EMPTY):
                     newBoard = self.insertPiece(board, i, RED)
-                    currentUtility = max(currentUtility,self.alphaBetaPruning(newBoard,"min", maxDepth, alpha , beta, currentDepth + 1))
+                    if self.gameOver(newBoard):
+                        currentUtility =4
+                    else:
+                        currentUtility = max(currentUtility,self.alphaBetaPruning(newBoard,"min", maxDepth, alpha , beta, currentDepth + 1))
                     if(currentUtility > beta):
                         break
                     alpha = max(alpha,currentUtility)
-            return currentUtility
+
+            if( currentUtility == -999999):
+                return self.getUtility(board)
+            else :
+                return currentUtility
         else:
             currentUtility = 999999
             for i in range(0, 7):
                 newBoard = self.insertPiece(board, i, BLUE)
-                currentUtility = min(currentUtility,self.alphaBetaPruning(newBoard,"max", maxDepth, alpha , beta, currentDepth + 1))
+                if self.gameOver(newBoard):
+                    currentUtility = -4
+                else:
+                    currentUtility = min(currentUtility,self.alphaBetaPruning(newBoard,"max", maxDepth, alpha , beta, currentDepth + 1))
                 if(currentUtility < alpha):
                     break
                 beta = min(beta,currentUtility)
-            return currentUtility
+            if( currentUtility == 999999):
+                return self.getUtility(board)
+            else :
+                return currentUtility
+            
             
     
     def chooseColumn(self , board, maxDepth):

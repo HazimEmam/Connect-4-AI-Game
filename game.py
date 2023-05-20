@@ -28,13 +28,13 @@ def main():
 
         # FOR DEBUG PURPOSES
         board.print_grid(game_board)
-        time.sleep(2)
+        #time.sleep(2)
 
         # YOUR CODE GOES HERE
 
         # Insert here the action you want to perform based on the output of the algorithm
         # You can use the following function to select a column
-        selected_column = alpha.chooseColumn(game_board,6)
+        selected_column = alpha.chooseColumn(game_board,4)
         print("selected column = ",selected_column)
         board.select_column(selected_column)
 

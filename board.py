@@ -3,9 +3,9 @@ import pyautogui
 
 # YOU MAY NEED TO CHANGE THESE VALUES BASED ON YOUR SCREEN SIZE
 LEFT = 570
-TOP = 200
+TOP = 210
 RIGHT = 1350
-BOTTOM = 875
+BOTTOM = 855
 
 EMPTY = 0
 RED = 1
@@ -35,6 +35,9 @@ class Board:
                     print("R", end=" \t")
                 elif grid[i][j] == BLUE:
                     print("B", end=" \t")
+                #else :
+                    #print("*", end=" \t")
+
             print("\n")
         print('---------------------------')
     
@@ -54,9 +57,9 @@ class Board:
             for j in range(0, len(grid[i])):
                 if grid[i][j] == (255, 255, 255):
                     grid[i][j] = EMPTY
-                elif grid[i][j][0] > 200:
+                elif grid[i][j][0] >=  100:
                     grid[i][j] = RED
-                elif grid[i][j][0] > 50:
+                elif grid[i][j][2] >= 100:
                     grid[i][j] = BLUE
         return grid
 
@@ -91,7 +94,7 @@ class Board:
     def _get_grid(self):
         cropedImage = self._capture_image()
         pixels = self._convert_image_to_grid(cropedImage)
-        # cropedImage.show()
+        #cropedImage.show()
         grid = self._transpose_grid(pixels)
         return grid
 
@@ -110,7 +113,13 @@ class Board:
         return (self.board, is_game_end)
 
     def select_column(self, column):
-        pyautogui.click(
-            self._get_grid_cordinates()[column][1] + LEFT,
-            self._get_grid_cordinates()[column][0] + TOP,
-        )
+        if(column == 6):
+            pyautogui.click(
+                self._get_grid_cordinates()[column][1] + LEFT+650,
+                self._get_grid_cordinates()[column][0] + TOP,
+            )
+        else:
+            pyautogui.click(
+                self._get_grid_cordinates()[column][1] + LEFT,
+                self._get_grid_cordinates()[column][0] + TOP,
+            )

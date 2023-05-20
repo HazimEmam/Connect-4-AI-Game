@@ -124,7 +124,9 @@ class MinMax:
                     currentUtility = self.minMax(newBoard, "max", maxDepth, currentDepth + 1)
                     arr.append(currentUtility)
         arr = sorted(arr)
-        print ("array = " ,arr)
+        #print ("array = " ,arr)
+        if len(arr) == 0 :
+            return self.getUtility(board)
         if minOrMax == "max":
             return arr[-1]
         else:
