@@ -1,66 +1,105 @@
-# coding=utf-8
-# This is a sample Python script.
-
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
-
-
+from tkinter import *
 import tkinter as tk
+from board import Board
+import time
+import random
+from alphaBeta import AlphaBeta
+from MinMax import MinMax
 
-root = tk.Tk()
-root.title("Difficulty Selection")
+class GUIGame:
+    def __init__(self):
+        self.selectedAlgorithm = "MiniMax"
+        self.diff = "easy"
+        self.root = root
+        self.root.geometry('400x500+800+200')
+        self.root.title('Difficulty Selection')
+        self.root.configure(background="#4C4C6D")
+        self.root.resizable(False,False)
+        algTitle=Label(self.root, text='Choose Algorithm' , bg='#1B9C85',font=('monospace',14),fg='#FFE194')
+        algTitle.pack(fill=X)
+        #------optionBox-------
+        algoFrame = Frame(self.root,background='#E8F6EF')
+        algoFrame.place(x=125 , y=30 , width=150 , height= 30)
 
+        options = ["MiniMax", "AlphaBeta pruning"]
+        algorithm = tk.StringVar(algoFrame)
+        algorithm.set(options[0])
+        algoChoose = tk.OptionMenu(algoFrame, algorithm, *options, command=self.on_select)
+        algoChoose.pack()
 
-# Create a variable to store the selected option
-option = tk.StringVar(value="Option 1")
-option = tk.StringVar(value="Option 2")
+        #------DifficultyFrame---
+        diffFrame = Frame(self.root,background='#E8F6EF')
+        diffFrame.place(x=50 , y=100 , width=300 , height=350)
+        diffTitle=Label(diffFrame, text='Choose Difficulty' , bg='#1B9C85',font=('monospace',10),fg='#FFE194')
+        diffTitle.pack(fill=X)
 
+        easyButton=Button(diffFrame,text='Easy',command=lambda: self.select_easy())
+        easyButton.place(x=75 , y = 60 , width=150 , height=50)
+        mediamButton=Button(diffFrame,text='Medium',command=self.select_medium)
+        mediamButton.place(x=75 , y = 120 , width=150 , height=50)
+        HardButton=Button(diffFrame,text='Hard',command=self.select_hard)
+        HardButton.place(x=75 , y = 180 , width=150 , height=50)
+        playButton=Button(diffFrame,text='Play',command=self.play)
+        playButton.place(x=100 , y = 240 , width=100 , height=50)
 
-# Set the window size and position
-WINDOW_WIDTH = 400
-WINDOW_HEIGHT = 300
-screen_width = root.winfo_screenwidth()
-screen_height = root.winfo_screenheight()
-x_pos = int((screen_width/2) - (WINDOW_WIDTH/2))
-y_pos = int((screen_height/2) - (WINDOW_HEIGHT/2))
-root.geometry(f'{WINDOW_WIDTH}x{WINDOW_HEIGHT}+{x_pos}+{y_pos}')
+    def on_select(self,value):
+        #print(value, "Algorithm was Selected")
+        self.selectedAlgorithm = value
 
-# Define the callback functions for each button
-def select_MinMax():
-    print("MinMax Algorithm")
-
-def select_AlphaBeta():
-    print("AlphaBeta Algorthim")
-
-def select_easy():
-    print("Easy mode selected")
-
-
-def select_medium():
-    print("Medium mode selected")
-
-
-def select_hard():
-    print("Hard mode selected")
-
-
-# Create the radio buttons
-rb1 = tk.Radiobutton(root, text="MinMax Algorithm",command = select_MinMax ,variable=option, value="MinMax Algorithm")
-rb2 = tk.Radiobutton (root, text="AlphaBeta Algorithm",command = select_AlphaBeta ,variable=option, value="AlphaBeta Algorithm")
-
-# Create the buttons and add them to the window
-button_easy = tk.Button(root, text="Easy", command=select_easy, width=20, height=3)
-button_medium = tk.Button(root, text="Medium", command=select_medium, width=20, height=3)
-button_hard = tk.Button(root, text="Hard", command=select_hard, width=20, height=3)
-
-rb1.pack(side="top")
-rb2.pack(side="top", padx=50, pady=0)
-button_easy.pack(side="top",pady=10)
-button_medium.pack(side= "top",pady=10)
-button_hard.pack(side= "top",pady=10)
+    def select_easy(self):
+        #print("Easy mode selected")
+        self.diff="easy"
 
 
-# Start the main loop
+    def select_medium(self):
+        #print("Medium mode selected")
+        self.diff="medium"
+
+    def select_hard(self):
+        #print("Hard mode selected")
+        self.diff="hard"
+
+
+    def play(self):
+        board = Board()
+        if self.selectedAlgorithm == "AlphaBeta pruning":
+            algo = AlphaBeta()
+            maxDepth=0
+            if self.diff == "easy":
+                maxDepth = 2
+            elif self.diff == "medium":
+                maxDepth = 4
+            elif self.diff == "hard":
+                maxDepth = 6
+            time.sleep(2)
+            game_end = False
+            while not game_end:
+                (game_board, game_end) = board.get_game_grid()
+                board.print_grid(game_board)
+                time.sleep(2)
+                selected_column = algo.chooseColumn(game_board,maxDepth)
+                board.select_column(selected_column)
+                time.sleep(2)
+        else:
+            algo=MinMax()
+            maxDepth=0
+            if self.diff == "easy":
+                maxDepth = 2
+            elif self.diff == "medium":
+                maxDepth = 4
+            elif self.diff == "hard":
+                maxDepth = 5
+            time.sleep(2)
+            game_end = False
+            while not game_end:
+                (game_board, game_end) = board.get_game_grid()
+                board.print_grid(game_board)
+                time.sleep(2)
+                selected_column = algo.chooseColumn(game_board,maxDepth)
+                board.select_column(selected_column)
+                time.sleep(2)
+
+
+root=Tk()
+obj=GUIGame()
 root.mainloop()
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
