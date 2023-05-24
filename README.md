@@ -16,3 +16,11 @@ Connect 4 is a classic two-player strategy game where the goal is to be the firs
 - Visual representation of the game board
 
 
+## This Project's Contributers
+
+- Hazim Emam Muhammed Ali
+- Omar Rafaat Ali Hammad
+- Khaled Ahmed Sayed Hashem
+- Ramez Ehab Talaat
+- Ahmed Tarek Keshta
+
