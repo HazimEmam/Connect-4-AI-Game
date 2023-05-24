@@ -15,6 +15,4 @@ Connect 4 is a classic two-player strategy game where the goal is to be the firs
 - Automatic detection of game over and winning conditions
 - Visual representation of the game board
 
-##Contact
 
-If you have any questions, suggestions
